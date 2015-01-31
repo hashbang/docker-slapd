@@ -8,8 +8,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ADD slapd.conf /tmp/slapd.conf
-
 ADD run.sh /tmp/run.sh
 
 EXPOSE 389
