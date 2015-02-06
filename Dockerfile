@@ -8,7 +8,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ADD config/tls.ldif /etc/ldap/tls.ldif
 ADD run.sh /tmp/run.sh
 
 VOLUME /var/lib/ldap
