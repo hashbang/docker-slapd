@@ -5,10 +5,13 @@ After=docker.service
 
 [Service]
 Restart=always
+ExecStartPre=/usr/bin/docker pull hashbang/slapd
 ExecStart=/usr/bin/docker run \
-  -v /home/core/slapd:/var/lib/ldap \
+  -e ROOTPASS:some-password
+  -e DOAMAIN:ldap.somedomain.com
+  -e ORG:SomeOrgName
+  -v /home/core/slapd/ssl:/etc/ldap/ssl \
   -p 389:389 \
-  --rm \
   --name="slapd" \
   hashbang/slapd
 
