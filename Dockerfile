@@ -3,14 +3,17 @@ FROM debian:jessie
 RUN apt-get update && \
     LC_ALL=C DEBIAN_FRONTEND=noninteractive apt-get install -y \
       ldap-utils \
-      slapd \
-      pwgen && \
+      slapd && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ADD run.sh /tmp/run.sh
 
 VOLUME /var/lib/ldap
+
+ENV ROOTPASS somepass
+ENV DOMAIN hashbang.sh
+ENV ORG Hashbang
 
 EXPOSE 389
 

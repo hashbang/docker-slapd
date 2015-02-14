@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [ -z "$ROOTPASS" ]; then ROOTPASS=`pwgen -c -n -1 15`; fi
-if [ -z "$DOMAIN" ]; then DOMAIN="hashbang.sh"; fi
-if [ -z "$ORG" ]; then ORG="Hashbang"; fi
-
 cat <<EOF
 
 SlapD Config:
@@ -34,8 +30,6 @@ EOF
 
   dpkg-reconfigure -f noninteractive slapd
 
-  chown -R openldap:openldap /etc/ldap 
-
   if [ -e /etc/ldap/ssl/ldap.crt ] && \
      [ -e /etc/ldap/ssl/ldap.key ] && \
      [ -e /etc/ldap/ssl/ca.crt ]; then
@@ -53,8 +47,6 @@ EOF
   touch /var/lib/ldap/.bootstrapped
 
 fi
-
-chown -R openldap:openldap /var/lib/ldap
 
 ulimit -n 1024
 /usr/sbin/slapd -h "ldap:///" -u openldap -g openldap -d 2
