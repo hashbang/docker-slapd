@@ -1,19 +1,22 @@
 [Unit]
 Description=#! LDAP Server
-Author=Hashbang Team - team@hashbang.sh
 After=docker.service
+Requires=docker.service
 
 [Service]
 Restart=always
-ExecStartPre=/usr/bin/docker pull hashbang/slapd
+ExecStartPre=-/usr/bin/docker pull hashbang/slapd
+ExecStartPre=-/usr/bin/docker kill slapd
+ExecStartPre=-/usr/bin/docker rm slapd
 ExecStart=/usr/bin/docker run \
   -p 389:389 \
   -v /home/core/slapd/ssl:/etc/ldap/ssl \
-  -e ROOTPASS="SOMEPASS" \
+  --volumes-from slapd-data \
+  -e ROOTPASS="somepass" \
+  -e DOMAIN="hashbang.sh" \
+  -e ORG="Hashbang" \
   --name="slapd" \
   hashbang/slapd
-
-ExecStop=/usr/bin/docker stop slapd
 
 [Install]
 WantedBy=multi-user.target
