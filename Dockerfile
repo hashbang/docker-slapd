@@ -10,6 +10,7 @@ RUN apt-get update && \
 ADD run.sh /tmp/run.sh
 
 VOLUME /var/lib/ldap
+VOLUME /etc/ldap/slapd.d
 
 ENV ROOTPASS somepass
 ENV DOMAIN hashbang.sh

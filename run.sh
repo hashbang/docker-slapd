@@ -49,4 +49,4 @@ EOF
 fi
 
 ulimit -n 1024
-/usr/sbin/slapd -h "ldap:///" -u openldap -g openldap -d 2
+/usr/sbin/slapd -h "ldap:///" -h "ldapi:///" -u openldap -g openldap -d 2
