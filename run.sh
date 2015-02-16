@@ -1,6 +1,8 @@
 #!/bin/bash
 
-cat <<EOF
+if [ ! -e /var/lib/ldap/.bootstrapped ]; then
+
+    cat <<EOF
 
 Setting SlapD Config:
 
@@ -10,7 +12,7 @@ ORG=${ORG}
 
 EOF
 
-cat <<EOF | debconf-set-selections
+    cat <<EOF | debconf-set-selections
 slapd slapd/internal/generated_adminpw password ${ROOTPASS}
 slapd slapd/internal/adminpw password ${ROOTPASS}
 slapd slapd/password2 password ${ROOTPASS}
@@ -26,19 +28,23 @@ slapd slapd/no_configuration boolean false
 slapd slapd/dump_database select when needed
 EOF
 
-dpkg-reconfigure -f noninteractive slapd
+    dpkg-reconfigure -f noninteractive slapd
 
-if [ -e /etc/ldap/ssl/ldap.crt ] && \
-   [ -e /etc/ldap/ssl/ldap.key ] && \
-   [ -e /etc/ldap/ssl/ca.crt ]; then
-
-  echo "SSL Certificates Found"
-
-  echo <<EOF >> /etc/ldap/slapd.conf
+    if [ -e /etc/ldap/ssl/ldap.crt ] && \
+       [ -e /etc/ldap/ssl/ldap.key ] && \
+       [ -e /etc/ldap/ssl/ca.crt ]; then
+    
+      echo "SSL Certificates Found"
+    
+      echo <<EOF >> /etc/ldap/slapd.conf
 TLSCACertificateFile    /etc/ldap/ssl/ca.crt
 TLSCertificateKeyFile   /etc/ldap/ssl/ldap.key
 TLSCertificateFile      /etc/ldap/ssl/ldap.crt
 EOF
+
+    fi
+
+    touch /var/lib/ldap/.bootstrapped
 
 fi
 
