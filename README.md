@@ -12,7 +12,13 @@
     sudo systemctl start docker-slapd.service
     ```
 
-3. Load custom LDIF files remotely with: 
+3. Create a persistent data container
+
+    ```
+    docker create -v /var/lib/ldap -v /etc/ldap/slapd.d/ --name slapd-data hashbang/slapd
+    ```
+
+4. Load custom LDIF files remotely with: 
 
     ```bash
     ldapadd -h ldap.yourdomain.com -p 389 -c -x -D cn=admin,dc=mycorp,dc=com -W -f somefile.ldif
