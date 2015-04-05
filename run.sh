@@ -12,6 +12,8 @@ ORG=${ORG}
 
 EOF
 
+ulimit -n 1024
+
     cat <<EOF | debconf-set-selections
 slapd slapd/internal/generated_adminpw password ${ROOTPASS}
 slapd slapd/internal/adminpw password ${ROOTPASS}
@@ -48,5 +50,4 @@ EOF
 
 fi
 
-ulimit -n 1024
 /usr/sbin/slapd -h "ldap:///" -h "ldapi:///" -u openldap -g openldap -d 2
