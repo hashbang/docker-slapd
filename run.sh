@@ -10,7 +10,7 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
     DOMAIN=${DOMAIN}
     ORG=${ORG}
 
-    EOF
+EOF
 
     ulimit -n 1024
 
@@ -32,7 +32,7 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
     slapd   slapd/dump_database select  when needed
     slapd   slapd/dump_database_destdir string  /var/backups/slapd-VERSION
     slapd   slapd/move_old_database boolean true
-    EOF
+EOF
 
     dpkg-reconfigure -f noninteractive slapd
 
@@ -46,7 +46,7 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
         TLSCACertificateFile    /etc/ldap/ssl/ca.crt
         TLSCertificateKeyFile   /etc/ldap/ssl/ldap.key
         TLSCertificateFile      /etc/ldap/ssl/ldap.crt
-        EOF
+EOF
 
     fi
 
