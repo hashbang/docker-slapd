@@ -54,4 +54,4 @@ EOF
 
 fi
 
-/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 2
+/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0
