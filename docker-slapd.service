@@ -12,7 +12,8 @@ ExecStart=/usr/bin/docker run \
   -p 389:389 \
   -v /home/core/slapd/ssl:/etc/ldap/ssl \
   --volumes-from slapd-data \
-  -e ROOTPASS="somepass" \
+  -e ADMIN_PASS="somepass" \
+  -e ROOT_PASS="somepass" \
   -e DOMAIN="hashbang.sh" \
   -e ORG="Hashbang" \
   --name="slapd" \

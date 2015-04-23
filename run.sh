@@ -6,7 +6,8 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 
 	Setting SlapD Config:
 	
-	ROOTPASS=${ROOTPASS}
+	ROOT_PASS=${ROOT_PASS}
+	ADMIN_PASS=${ADMIN_PASS}
 	DOMAIN=${DOMAIN}
 	ORG=${ORG}
 
@@ -15,10 +16,10 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 	ulimit -n 1024
 
 	cat <<- EOF | debconf-set-selections
-	slapd slapd/internal/generated_adminpw password ${ROOTPASS}
-	slapd slapd/internal/adminpw password ${ROOTPASS}
-	slapd slapd/password1 password ${ROOTPASS}
-	slapd slapd/password2 password ${ROOTPASS}
+	slapd slapd/internal/generated_adminpw password ${ADMIN_PASS}
+	slapd slapd/internal/adminpw password ${ADMIN_PASS}
+	slapd slapd/password1 password ${ADMIN_PASS}
+	slapd slapd/password2 password ${ADMIN_PASS}
 	slapd slapd/domain string ${DOMAIN}
 	slapd shared/organization string ${ORG}
 	slapd slapd/unsafe_selfwrite_acl note
@@ -49,6 +50,22 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 		EOF
 
 	fi
+
+	slapd -h "ldapi:///" -u openldap -g openldap
+
+	ldapmodify \
+		-Y EXTERNAL \
+		-H ldapi:/// \
+		<<-EOF
+		dn: olcDatabase={0}config,cn=config
+		changetype: modify
+		add: olcRootPW
+		olcRootPW: $(slappasswd -s ${ROOT_PASS})
+		EOF
+
+	killall slapd
+	
+	sleep 2
 
 	touch /var/lib/ldap/.bootstrapped
 

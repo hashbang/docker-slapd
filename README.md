@@ -7,8 +7,8 @@
 2. Edit systemd service and load/start on target server
 
     ```bash
-    vim docker-slapd.conf
-    sudo systemctl enable $PWD/docker-slapd.conf
+    vim docker-slapd.service
+    sudo systemctl enable $PWD/docker-slapd.service
     sudo systemctl start docker-slapd.service
     ```
 
