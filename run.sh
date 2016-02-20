@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 
@@ -60,7 +60,8 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 		dn: olcDatabase={0}config,cn=config
 		changetype: modify
 		add: olcRootPW
-		olcRootPW: $(slappasswd -s ${ROOT_PASS})
+		olcRootPW: $(slappasswd -s "${ROOT_PASS}")
+		-
 		EOF
 
 	killall slapd
@@ -71,4 +72,17 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 
 fi
 
-/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0
+/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0 &
+
+ldapmodify \
+	-Y EXTERNAL \
+	-H ldapi:/// \
+	<<-EOF
+	dn: cn=config
+	changetype: modify
+	replace: olcSizeLimit
+	olcSizeLimit: -1
+	-
+	EOF
+
+fg
