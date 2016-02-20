@@ -72,4 +72,17 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 
 fi
 
-/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0
+/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0 &
+
+ldapmodify \
+	-Y EXTERNAL \
+	-H ldapi:/// \
+	<<-EOF
+	dn: cn=config
+	changetype: modify
+	replace: olcSizeLimit
+	olcSizeLimit: -1
+	-
+	EOF
+
+fg
