@@ -85,4 +85,4 @@ ldapmodify \
 	-
 	EOF
 
-fg
+wait
