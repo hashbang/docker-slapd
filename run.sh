@@ -74,6 +74,8 @@ fi
 
 /usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0 &
 
+sleep 5
+
 ldapmodify \
 	-Y EXTERNAL \
 	-H ldapi:/// \
