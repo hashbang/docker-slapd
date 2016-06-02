@@ -37,20 +37,6 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 
 	dpkg-reconfigure -f noninteractive slapd
 
-	if [ -e /etc/ldap/ssl/ldap.crt ] && \
-	   [ -e /etc/ldap/ssl/ldap.key ] && \
-	   [ -e /etc/ldap/ssl/ca.crt ]; then
-	
-		echo "SSL Certificates Found"
-	
-		echo <<- EOF >> /etc/ldap/slapd.conf
-		TLSCACertificateFile	/etc/ldap/ssl/ca.crt
-		TLSCertificateKeyFile   /etc/ldap/ssl/ldap.key
-		TLSCertificateFile	  /etc/ldap/ssl/ldap.crt
-		EOF
-
-	fi
-
 	slapd -h "ldapi:///" -u openldap -g openldap
 
 	ldapmodify \
@@ -69,6 +55,20 @@ if [ ! -e /var/lib/ldap/.bootstrapped ]; then
 	sleep 2
 
 	touch /var/lib/ldap/.bootstrapped
+
+fi
+
+if [ -e /etc/ldap/ssl/ldap.crt ] && \
+   [ -e /etc/ldap/ssl/ldap.key ] && \
+   [ -e /etc/ldap/ssl/ca.crt ]; then
+
+	echo "SSL Certificates Found"
+
+	echo <<- EOF > /etc/ldap/slapd.conf
+	TLSCACertificateFile	/etc/ldap/ssl/ca.crt
+	TLSCertificateKeyFile   /etc/ldap/ssl/ldap.key
+	TLSCertificateFile	  /etc/ldap/ssl/ldap.crt
+	EOF
 
 fi
 
