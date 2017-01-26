@@ -9,7 +9,7 @@ ExecStartPre=-/usr/bin/docker pull hashbang/slapd
 ExecStartPre=-/usr/bin/docker kill slapd
 ExecStartPre=-/usr/bin/docker rm slapd
 ExecStart=/usr/bin/docker run \
-  -p 389:389 \
+  -p 389:389 -p 636:636 \
   -v /home/core/slapd/ssl:/etc/ldap/ssl \
   --volumes-from slapd-data \
   -e ADMIN_PASS="somepass" \

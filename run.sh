@@ -72,7 +72,7 @@ if [ -e /etc/ldap/ssl/ldap.crt ] && \
 
 fi
 
-/usr/sbin/slapd -h "ldap:/// ldapi:///" -u openldap -g openldap -d 0 &
+/usr/sbin/slapd -h "ldap:/// ldaps:/// ldapi:///" -u openldap -g openldap -d 0 &
 
 sleep 5
 
