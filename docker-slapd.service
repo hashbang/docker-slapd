@@ -1,3 +1,6 @@
+[Install]
+WantedBy=multi-user.target
+
 [Unit]
 Description=#! LDAP Server
 After=docker.service
@@ -10,12 +13,9 @@ ExecStartPre=-/usr/bin/docker kill slapd
 ExecStartPre=-/usr/bin/docker rm slapd
 ExecStart=/usr/bin/docker run \
   -p 389:389 -p 636:636 \
-  -v /home/core/slapd/ssl:/etc/ldap/ssl \
-  --volumes-from slapd-data \
-  -e ADMIN_PASS="somepass" \
-  -e ROOT_PASS="somepass" \
-  -e DOMAIN="hashbang.sh" \
-  -e ORG="Hashbang" \
+  -v slapd-ssl:/etc/ldap/ssl \
+  -v slapd-data:/var/lib/ldap \
+  -v slapd-config:/etc/ldap/slapd.d \
   --name="slapd" \
   hashbang/slapd
 
